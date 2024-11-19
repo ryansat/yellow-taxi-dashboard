@@ -1,0 +1,74 @@
+/* src/pages/Dashboard.css */
+
+.dashboard-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Map takes 2/3 width, content 1/3 */
+  grid-template-rows: auto 1fr auto; /* Filters row on top, map and chart, trip list below */
+  grid-gap: 20px;
+  padding: 20px;
+}
+
+.map-container {
+  grid-column: 1 / 2; /* Map in the left column */
+  grid-row: 2 / 3;
+  height: 900px;
+  overflow: hidden;
+  border-radius: 8px; /* Optional for rounded corners */
+  width: 100%; /* Ensure it takes full width in the grid column */
+}
+
+.content-container {
+  grid-column: 2 / 3; /* Right column for charts */
+  grid-row: 2 / 3;
+}
+
+.trip-list {
+  grid-column: 1 / 3; /* Span across both columns */
+  grid-row: 3 / 4; /* Place below the map and chart */
+  background-color: rgba(30, 30, 30, 0.8);
+  padding: 20px;
+  border-radius: 8px;
+  color: #fff;
+  height: 200px;
+  overflow-y: auto;
+}
+
+.charts {
+  background-color: rgba(30, 30, 30, 0.8);
+  padding: 20px;
+  border-radius: 8px;
+  color: #fff;
+  height: 300px;
+}
+
+.filters {
+  grid-column: 1 / 3; /* Filters span across both columns */
+  grid-row: 1 / 2;
+  display: flex;
+  gap: 10px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 1200px) {
+  .dashboard-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+  }
+
+  .map-container {
+    width: 100%;
+    height: 500px; /* Adjust height for smaller screens */
+  }
+
+  .content-container {
+    grid-column: 1 / 2;
+  }
+
+  .trip-list {
+    grid-column: 1 / 2;
+  }
+
+  .filters {
+    flex-wrap: wrap;
+  }
+}
