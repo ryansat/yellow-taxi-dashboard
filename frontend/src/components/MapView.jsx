@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-// src/components/MapView.js
 import React from "react";
 import {
   MapContainer,
@@ -9,7 +8,6 @@ import {
   Polyline,
 } from "react-leaflet";
 import L from "leaflet";
-import MapPlaceholder from "./MapPlaceholder";
 import "leaflet/dist/leaflet.css";
 
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -24,8 +22,8 @@ L.Icon.Default.mergeOptions({
 });
 
 const center = {
-  lat: 40.7128,
-  lng: -74.006,
+  lat: -8.1165,
+  lng: 112.1505,
 };
 
 // eslint-disable-next-line react/prop-types
@@ -35,45 +33,54 @@ function MapView({ trips }) {
       center={center}
       zoom={13}
       scrollWheelZoom={true}
-      style={{ height: "80vh", width: "1000%" }}
-      placeholder={<MapPlaceholder />}
+      style={{ height: "80vh", width: "100%" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       />
       {trips.map((trip, index) => {
-        const pickupPosition = [
-          parseFloat(trip.pickup_latitude),
-          parseFloat(trip.pickup_longitude),
-        ];
-        const dropoffPosition = [
-          parseFloat(trip.dropoff_latitude),
-          parseFloat(trip.dropoff_longitude),
-        ];
+        const startPosition = [trip.StartPos.Latitude, trip.StartPos.Longitude];
+        const endPosition = [trip.EndPos.Latitude, trip.EndPos.Longitude];
 
         return (
           <React.Fragment key={index}>
             <Polyline
-              positions={[pickupPosition, dropoffPosition]}
+              positions={[startPosition, endPosition]}
               color='blue'
             />
-            <Marker position={pickupPosition}>
+            <Marker position={startPosition}>
               <Popup>
-                <strong>Pickup</strong>
+                <strong>Start Position</strong>
                 <br />
-                {`Time: ${trip.pickup_datetime}`}
+                {`Time: ${new Date(trip.StartTime).toLocaleString()}`}
                 <br />
-                {`Location: (${trip.pickup_latitude}, ${trip.pickup_longitude})`}
+                {`Speed: ${trip.StartPos.Speed} km/h`}
+                <br />
+                {`Location: (${trip.StartPos.Latitude}, ${trip.StartPos.Longitude})`}
+                {trip.StartPos.Address && (
+                  <>
+                    <br />
+                    {`Address: ${trip.StartPos.Address}`}
+                  </>
+                )}
               </Popup>
             </Marker>
-            <Marker position={dropoffPosition}>
+            <Marker position={endPosition}>
               <Popup>
-                <strong>Drop-off</strong>
+                <strong>End Position</strong>
                 <br />
-                {`Time: ${trip.dropoff_datetime}`}
+                {`Time: ${new Date(trip.EndTime).toLocaleString()}`}
                 <br />
-                {`Location: (${trip.dropoff_latitude}, ${trip.dropoff_longitude})`}
+                {`Speed: ${trip.EndPos.Speed} km/h`}
+                <br />
+                {`Location: (${trip.EndPos.Latitude}, ${trip.EndPos.Longitude})`}
+                {trip.EndPos.Address && (
+                  <>
+                    <br />
+                    {`Address: ${trip.EndPos.Address}`}
+                  </>
+                )}
               </Popup>
             </Marker>
           </React.Fragment>

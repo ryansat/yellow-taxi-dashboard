@@ -1,0 +1,86 @@
+.trip-list-container {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.trip-list-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.trip-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.trip-item {
+  background-color: #444;
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.trip-fuel-summary {
+  margin-bottom: 20px;
+}
+
+.trip-fuel-summary h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: white;
+}
+
+.summary-item {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.summary-item strong {
+  color: #ccc;
+  margin-right: 10px;
+}
+
+.trip-details {
+  border-top: 1px solid #555;
+  padding-top: 15px;
+}
+
+.detail-item {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.detail-item strong {
+  color: #ccc;
+  margin-right: 10px;
+}
+
+/* Add some hover effect for interactivity */
+.trip-item:hover {
+  background-color: #4a4a4a;
+  transition: background-color 0.2s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .trip-list-container {
+    padding: 15px;
+  }
+
+  .trip-list-title {
+    font-size: 1.5rem;
+  }
+
+  .trip-fuel-summary h3 {
+    font-size: 1.2rem;
+  }
+
+  .summary-item,
+  .detail-item {
+    font-size: 1rem;
+  }
+}
