@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
-// src/components/MapView.js
-import React from "react";
+import React, { useMemo } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -23,60 +21,77 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-const center = {
-  lat: 40.7128,
-  lng: -74.006,
-};
+function MapView({ positions }) {
+  // Determine center based on positions or use a default
+  const center = useMemo(() => {
+    if (positions && positions.length > 0) {
+      return {
+        lat: positions[0].StartPos.Latitude,
+        lng: positions[0].StartPos.Longitude,
+      };
+    }
+    return { lat: -7.3316233, lng: 112.7067116 }; // Default to first position in previous example
+  }, [positions]);
 
-// eslint-disable-next-line react/prop-types
-function MapView({ trips }) {
+  // Create path from positions
+  const positionPath = useMemo(() => {
+    return positions.map((pos) => [
+      pos.StartPos.Latitude,
+      pos.StartPos.Longitude,
+    ]);
+  }, [positions]);
+
   return (
     <MapContainer
-      center={center}
+      center={[center.lat, center.lng]}
       zoom={13}
       scrollWheelZoom={true}
-      style={{ height: "80vh", width: "1000%" }}
+      style={{ height: "80vh", width: "100%" }}
       placeholder={<MapPlaceholder />}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       />
-      {trips.map((trip, index) => {
-        const pickupPosition = [
-          parseFloat(trip.pickup_latitude),
-          parseFloat(trip.pickup_longitude),
-        ];
-        const dropoffPosition = [
-          parseFloat(trip.dropoff_latitude),
-          parseFloat(trip.dropoff_longitude),
+
+      {/* Vehicle Path Polyline */}
+      {positionPath.length > 1 && (
+        <Polyline
+          positions={positionPath}
+          color='blue'
+          weight={3}
+        />
+      )}
+
+      {positions.map((position, index) => {
+        const markerPosition = [
+          position.StartPos.Latitude,
+          position.StartPos.Longitude,
         ];
 
         return (
-          <React.Fragment key={index}>
-            <Polyline
-              positions={[pickupPosition, dropoffPosition]}
-              color='blue'
-            />
-            <Marker position={pickupPosition}>
-              <Popup>
-                <strong>Pickup</strong>
+          <Marker
+            key={index}
+            position={markerPosition}
+          >
+            <Popup>
+              <div>
+                <strong>Vehicle Position {index + 1}</strong>
                 <br />
-                {`Time: ${trip.pickup_datetime}`}
+                <strong>Vehicle ID:</strong> {position.StartPos.VehicleID}
                 <br />
-                {`Location: (${trip.pickup_latitude}, ${trip.pickup_longitude})`}
-              </Popup>
-            </Marker>
-            <Marker position={dropoffPosition}>
-              <Popup>
-                <strong>Drop-off</strong>
+                <strong>Time:</strong> {position.StartTime}
                 <br />
-                {`Time: ${trip.dropoff_datetime}`}
+                <strong>Address:</strong> {position.StartPos.Address}
                 <br />
-                {`Location: (${trip.dropoff_latitude}, ${trip.dropoff_longitude})`}
-              </Popup>
-            </Marker>
-          </React.Fragment>
+                <strong>Speed:</strong> {position.StartPos.Speed} km/h
+                <br />
+                <strong>Location:</strong>(
+                {position.StartPos.Latitude.toFixed(4)},{" "}
+                {position.StartPos.Longitude.toFixed(4)})
+              </div>
+            </Popup>
+          </Marker>
         );
       })}
     </MapContainer>

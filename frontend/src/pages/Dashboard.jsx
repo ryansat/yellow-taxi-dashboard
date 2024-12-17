@@ -1,21 +1,37 @@
-// src/pages/Dashboard.js
-import MapView from "../components/MapView";
-import TripList from "../components/TripList";
-import Charts from "../components/Charts";
 import { useState, useEffect } from "react";
-import "./Dashboard.css"; // Import CSS file
+import MapView from "../components/MapView";
+import Charts from "../components/Charts";
+import "./Dashboard.css";
 
 function Dashboard() {
   const [trips, setTrips] = useState([]);
+  const [mapPositions, setMapPositions] = useState([]);
+  const [fuelData, setFuelData] = useState(null);
   const [filters, setFilters] = useState({
     time: "",
     fare: "",
     distance: "",
     paymentType: "",
+    fromDate: "2024-12-01",
+    toDate: "2024-12-17",
+    vehicleId: "11115",
   });
 
+  const fetchFuelData = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/v1/fuel/report/${filters.vehicleId}?fromDate=${filters.fromDate}&toDate=${filters.toDate}`
+      );
+      const { data } = await response.json();
+      setFuelData(data);
+    } catch (error) {
+      console.error("Error fetching fuel data:", error);
+    }
+  };
+
+  // Fetch NYC Taxi Data
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchTaxiData = async () => {
       try {
         const query = [
           filters.time && `pickup_datetime=${filters.time}`,
@@ -32,11 +48,27 @@ function Dashboard() {
         const data = await response.json();
         setTrips(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching taxi data:", error);
       }
     };
 
-    fetchData();
+    fetchFuelData();
+
+    // Fetch Vehicle Position Data
+    const fetchVehiclePositions = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/v1/position/report/${filters.vehicleId}?fromDate=${filters.fromDate}&toDate=${filters.toDate}`
+        );
+        const { data } = await response.json();
+        setMapPositions(data);
+      } catch (error) {
+        console.error("Error fetching vehicle positions:", error);
+      }
+    };
+
+    fetchTaxiData();
+    fetchVehiclePositions();
   }, [filters]);
 
   const handleFilterChange = (e) => {
@@ -49,51 +81,41 @@ function Dashboard() {
 
   return (
     <div className='dashboard-container'>
-      <div className='map-container'>
-        <MapView trips={trips} />
-      </div>
-      <div className='content-container'>
-        <div className='charts'>
-          <Charts trips={trips} />
-        </div>
-        <div className='trip-list'>
-          <TripList trips={trips.slice(0, 10)} />
-        </div>
-      </div>
       <div className='filters'>
-        <input
-          type='datetime-local'
-          name='time'
-          value={filters.time}
-          onChange={handleFilterChange}
-          placeholder='Pickup Time'
-        />
-        <input
-          type='number'
-          name='fare'
-          value={filters.fare}
-          onChange={handleFilterChange}
-          placeholder='Fare Amount'
-        />
-        <input
-          type='number'
-          name='distance'
-          value={filters.distance}
-          onChange={handleFilterChange}
-          placeholder='Trip Distance'
-        />
-        <select
+        {/* <select
           name='paymentType'
-          value={filters.paymentType}
           onChange={handleFilterChange}
+          value={filters.paymentType}
         >
           <option value=''>All Payment Types</option>
-          <option value='CRD'>Credit Card</option>
-          <option value='CSH'>Cash</option>
-          <option value='NOC'>No Charge</option>
-          <option value='DIS'>Dispute</option>
-          <option value='UNK'>Unknown</option>
-        </select>
+          <option value='1'>Credit Card</option>
+          <option value='2'>Cash</option>
+          <option value='3'>No Charge</option>
+          <option value='4'>Dispute</option>
+          <option value='5'>Unknown</option>
+        </select> */}
+
+        <input
+          type='date'
+          name='fromDate'
+          value={filters.fromDate}
+          onChange={handleFilterChange}
+        />
+
+        <input
+          type='date'
+          name='toDate'
+          value={filters.toDate}
+          onChange={handleFilterChange}
+        />
+      </div>
+
+      <div className='map-container'>
+        <MapView positions={mapPositions} />
+      </div>
+
+      <div className='chart-container'>
+        <Charts fuelData={fuelData} />
       </div>
     </div>
   );
