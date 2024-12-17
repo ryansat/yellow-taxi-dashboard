@@ -50,14 +50,41 @@ function Charts({ trips, fuelData }) {
     scales: {
       y: {
         beginAtZero: true,
+        grid: {
+          color: "rgba(255, 255, 255, 0.1)",
+        },
+        ticks: {
+          color: "#fff",
+        },
+      },
+      x: {
+        grid: {
+          color: "rgba(255, 255, 255, 0.1)",
+        },
+        ticks: {
+          color: "#fff",
+        },
       },
     },
     plugins: {
       title: {
         display: true,
         text: "Speed & Fuel Level Distribution",
+        color: "#fff",
+        font: {
+          size: 16,
+          weight: "bold",
+        },
+      },
+      legend: {
+        labels: {
+          color: "#fff",
+        },
       },
       tooltip: {
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        titleColor: "#fff",
+        bodyColor: "#fff",
         callbacks: {
           label: function (context) {
             const label = context.dataset.label || "";
@@ -70,26 +97,39 @@ function Charts({ trips, fuelData }) {
   };
 
   return (
-    <div>
-      <h2>Speed & Fuel Level Distribution</h2>
-      <Bar
-        data={data}
-        options={options}
-      />
+    <div className='charts-wrapper'>
+      <h2 className='chart-title'>Speed & Fuel Level Distribution</h2>
+      <div className='chart-container'>
+        <Bar
+          data={data}
+          options={options}
+        />
+      </div>
       {fuelData && (
-        <div
-          className='fuel-summary'
-          style={{
-            marginTop: "20px",
-            padding: "10px",
-            backgroundColor: "#f5f5f5",
-            borderRadius: "4px",
-          }}
-        >
-          <h3>Fuel Consumption Summary</h3>
-          <p>Start Level: {fuelData.start_level.toFixed(2)} L</p>
-          <p>End Level: {fuelData.end_level.toFixed(2)} L</p>
-          <p>Total Consumption: {fuelData.consumption.toFixed(2)} L</p>
+        <div className='fuel-summary'>
+          <div className='fuel-summary-header'>
+            <h3>Fuel Consumption Summary</h3>
+          </div>
+          <div className='fuel-summary-content'>
+            <div className='fuel-summary-item'>
+              <span className='fuel-label'>Start Level:</span>
+              <span className='fuel-value'>
+                {fuelData.start_level.toFixed(2)} L
+              </span>
+            </div>
+            <div className='fuel-summary-item'>
+              <span className='fuel-label'>End Level:</span>
+              <span className='fuel-value'>
+                {fuelData.end_level.toFixed(2)} L
+              </span>
+            </div>
+            <div className='fuel-summary-item'>
+              <span className='fuel-label'>Total Consumption:</span>
+              <span className='fuel-value'>
+                {fuelData.consumption.toFixed(2)} L
+              </span>
+            </div>
+          </div>
         </div>
       )}
     </div>

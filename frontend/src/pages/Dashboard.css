@@ -1,74 +1,248 @@
 /* src/pages/Dashboard.css */
-
 .dashboard-container {
   display: grid;
-  grid-template-columns: 2fr 1fr; /* Map takes 2/3 width, content 1/3 */
-  grid-template-rows: auto 1fr auto; /* Filters row on top, map and chart, trip list below */
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto 1fr auto;
   grid-gap: 20px;
   padding: 20px;
+  min-height: 100vh;
+  color: white;
+  padding-left: 15%; /* Add padding to center content */
+  padding-right: 15%; /* Balance the layout */
 }
 
+/* Title */
+.dashboard-title {
+  font-size: 3.5rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  color: white;
+  grid-column: 1 / -1; /* Span across all columns */
+}
+
+/* Filters Section */
+.filters {
+  grid-column: 1 / 3;
+  grid-row: 1 / 2;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.filter-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter-group h4 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0;
+  color: white;
+}
+
+.filter-input {
+  background-color: #333;
+  border: 1px solid #404040;
+  color: white;
+  padding: 0.75rem;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: #666;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-start;
+  margin-top: 1rem;
+}
+
+.filter-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s;
+}
+
+.filter-button.apply {
+  background-color: #2563eb;
+  color: white;
+}
+
+.filter-button.apply:hover {
+  background-color: #1d4ed8;
+}
+
+.filter-button.reset {
+  background-color: #4b5563;
+  color: white;
+}
+
+.filter-button.reset:hover {
+  background-color: #374151;
+}
+
+.filter-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Map Container */
 .map-container {
-  grid-column: 1 / 2; /* Map in the left column */
+  grid-column: 1 / 2;
   grid-row: 2 / 3;
-  height: 900px;
   overflow: hidden;
-  border-radius: 8px; /* Optional for rounded corners */
-  width: 100%; /* Ensure it takes full width in the grid column */
+  height: 900px;
+  width: 700px;
 }
 
+/* Content Container */
 .content-container {
-  grid-column: 2 / 3; /* Right column for charts */
+  grid-column: 2 / 3;
   grid-row: 2 / 3;
-}
-
-.trip-list {
-  grid-column: 1 / 3; /* Span across both columns */
-  grid-row: 3 / 4; /* Place below the map and chart */
-  background-color: rgba(30, 30, 30, 0.8);
-  padding: 20px;
-  border-radius: 8px;
-  color: #fff;
-  height: 200px;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .charts {
-  background-color: rgba(30, 30, 30, 0.8);
-  padding: 20px;
-  border-radius: 8px;
-  color: #000000;
+  padding: 1.5rem;
   height: 300px;
 }
 
-.filters {
-  grid-column: 1 / 3; /* Filters span across both columns */
-  grid-row: 1 / 2;
-  display: flex;
-  gap: 10px;
+.error-message {
+  background-color: #991b1b;
+  color: white;
+  padding: 1rem;
+  margin-top: 1rem;
 }
 
-/* Mobile responsiveness */
+.loading {
+  color: #9ca3af;
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Input type date calendar icon color fix */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+.charts-wrapper {
+  padding: 1.5rem;
+  color: white;
+}
+
+.chart-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+.chart-container {
+  background-color: #333;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.fuel-summary {
+  background-color: #333;
+  overflow: hidden;
+}
+
+.fuel-summary-header {
+  background-color: #404040;
+  padding: 1rem 1.5rem;
+}
+
+.fuel-summary-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: white;
+}
+
+.fuel-summary-content {
+  padding: 1.5rem;
+}
+
+.fuel-summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.fuel-summary-item:not(:last-child) {
+  border-bottom: 1px solid #404040;
+}
+
+.fuel-label {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.fuel-value {
+  color: white;
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .charts-wrapper {
+    padding: 1rem;
+  }
+
+  .chart-title {
+    font-size: 1.25rem;
+  }
+
+  .fuel-summary-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .fuel-summary-item {
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile Responsiveness */
 @media (max-width: 1200px) {
   .dashboard-container {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto;
+    grid-template-rows: auto auto auto;
+  }
+
+  .filter-inputs {
+    grid-template-columns: 1fr;
   }
 
   .map-container {
-    width: 100%;
-    height: 500px; /* Adjust height for smaller screens */
+    grid-column: 1 / 2;
+    height: 500px;
   }
 
   .content-container {
     grid-column: 1 / 2;
   }
 
-  .trip-list {
-    grid-column: 1 / 2;
-  }
-
-  .filters {
-    flex-wrap: wrap;
+  .dashboard-title {
+    font-size: 2.5rem;
   }
 }

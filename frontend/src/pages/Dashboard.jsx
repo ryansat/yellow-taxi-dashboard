@@ -116,31 +116,40 @@ function Dashboard() {
     <div className='dashboard-container'>
       <div className='filters'>
         <div className='filter-inputs'>
-          <input
-            type='date'
-            name='fromDate'
-            value={tempFilters.fromDate}
-            onChange={handleFilterChange}
-            placeholder='From Date'
-            className='filter-input'
-          />
-          <input
-            type='date'
-            name='toDate'
-            value={tempFilters.toDate}
-            onChange={handleFilterChange}
-            placeholder='To Date'
-            className='filter-input'
-          />
-          <input
-            type='text'
-            name='vehicleId'
-            value={tempFilters.vehicleId}
-            onChange={handleFilterChange}
-            placeholder='Vehicle ID'
-            className='filter-input'
-          />
+          <div className='filter-group'>
+            <h4>From Date</h4>
+            <input
+              type='date'
+              name='fromDate'
+              value={tempFilters.fromDate}
+              onChange={handleFilterChange}
+              className='filter-input'
+            />
+          </div>
+
+          <div className='filter-group'>
+            <h4>To Date</h4>
+            <input
+              type='date'
+              name='toDate'
+              value={tempFilters.toDate}
+              onChange={handleFilterChange}
+              className='filter-input'
+            />
+          </div>
+
+          <div className='filter-group'>
+            <h4>Vehicle Id</h4>
+            <input
+              type='text'
+              name='vehicleId'
+              value={tempFilters.vehicleId}
+              onChange={handleFilterChange}
+              className='filter-input'
+            />
+          </div>
         </div>
+
         <div className='filter-buttons'>
           <button
             onClick={handleApplyFilters}
